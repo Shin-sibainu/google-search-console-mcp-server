@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install)",
+      "Bash(npm run build:*)",
+      "Bash(timeout:*)",
+      "Bash(node:*)",
+      "Bash(test:*)",
+      "mcp__google-search-console__list_sites",
+      "mcp__google-search-console__get_analytics",
+      "Bash(find:*)",
+      "mcp__google-search-console__get_sitemaps",
+      "mcp__google-search-console__inspect_url",
+      "Bash(npm pack:*)",
+      "WebFetch(domain:www.samune-ai.jp)",
+      "Bash(git init:*)",
+      "Bash(gh repo create:*)",
+      "mcp__google-search-console__submit_url_for_indexing",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "google-search-console"
+  ]
+}

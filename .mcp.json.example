@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "google-search-console": {
+      "command": "node",
+      "args": ["build/index.js"],
+      "env": {
+        "GOOGLE_CLIENT_ID": "your-client-id.apps.googleusercontent.com",
+        "GOOGLE_CLIENT_SECRET": "your-client-secret",
+        "GOOGLE_REDIRECT_URI": "http://localhost:8080",
+        "GOOGLE_REFRESH_TOKEN": "your-refresh-token"
+      }
+    }
+  }
+}

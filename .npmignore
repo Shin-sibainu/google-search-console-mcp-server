@@ -1,0 +1,37 @@
+# Source files
+src/
+tsconfig.json
+
+# Development files
+.env
+.env.example
+.mcp.json
+.mcp.json.example
+
+# Documentation (keep README.md, LICENSE, CHANGELOG.md)
+docs/
+CLAUDE.md
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+*.test.ts
+*.spec.ts
+
+# Build artifacts
+*.tsbuildinfo

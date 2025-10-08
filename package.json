@@ -1,0 +1,54 @@
+{
+  "name": "google-search-console-mcp-server",
+  "version": "0.3.0",
+  "description": "Model Context Protocol server for Google Search Console API - integrate with Claude Code and Claude Desktop",
+  "type": "module",
+  "bin": {
+    "google-search-console-mcp": "./build/index.js"
+  },
+  "main": "./build/index.js",
+  "scripts": {
+    "build": "tsc && node -e \"require('fs').chmodSync('./build/index.js', '755')\"",
+    "dev": "tsc --watch",
+    "setup-auth": "node --loader ts-node/esm src/auth/setup-auth.ts"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "google-search-console",
+    "search-console",
+    "claude",
+    "claude-code",
+    "ai",
+    "seo",
+    "search-analytics",
+    "indexing-api"
+  ],
+  "author": "ShinCode",
+  "license": "MIT",
+  "homepage": "https://github.com/Shin-sibainu/google-search-console-mcp-server#readme",
+  "bugs": {
+    "url": "https://github.com/Shin-sibainu/google-search-console-mcp-server/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shin-sibainu/google-search-console-mcp-server.git"
+  },
+  "files": [
+    "build",
+    "README.md",
+    ".env.example"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.5.0",
+    "googleapis": "^144.0.0",
+    "dotenv": "^16.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
