@@ -18,36 +18,9 @@ A Model Context Protocol (MCP) server that provides programmatic access to Googl
 - 🔄 **Automatic Retry Logic** - Handles rate limits and transient failures
 - ✅ **Input Validation** - Validates all parameters before API calls
 
-## Prerequisites
+## Setup
 
-- Node.js v18 or higher
-- Google Cloud Project with Search Console API enabled
-- Google OAuth 2.0 credentials
-
-## Installation
-
-### Option 1: NPM (Recommended)
-
-```bash
-npm install google-search-console-mcp-server
-```
-
-Or use with `npx` (no installation required):
-
-```bash
-npx google-search-console-mcp-server
-```
-
-### Option 2: From Source
-
-```bash
-git clone https://github.com/Shin-sibainu/google-search-console-mcp-server.git
-cd google-search-console-mcp-server
-npm install
-npm run build
-```
-
-## Google Cloud Console Setup
+### Google Cloud Console Setup
 
 ### 1. Create a Project
 
