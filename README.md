@@ -20,43 +20,48 @@ A Model Context Protocol (MCP) server that provides programmatic access to Googl
 
 ## Setup
 
-### Google Cloud Console Setup
+### 1. Configure Claude Code
 
-### 1. Create a Project
+Create `.mcp.json` in your project root:
+
+```json
+{
+  "mcpServers": {
+    "google-search-console": {
+      "command": "npx",
+      "args": ["google-search-console-mcp-server"],
+      "env": {
+        "GOOGLE_CLIENT_ID": "your-client-id.apps.googleusercontent.com",
+        "GOOGLE_CLIENT_SECRET": "your-client-secret",
+        "GOOGLE_REDIRECT_URI": "http://localhost:8080",
+        "GOOGLE_REFRESH_TOKEN": "your-refresh-token"
+      }
+    }
+  }
+}
+```
+
+### 2. Get Google OAuth Credentials
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project or select an existing one
+2. Create a project and enable **Google Search Console API** (and optionally **Indexing API**)
+3. Create **OAuth 2.0 Client ID** (Desktop app)
+4. Add `http://localhost:8080` to **Authorized redirect URIs**
+5. Add your email to **Test users** in OAuth consent screen
 
-### 2. Enable APIs
+### 3. Get Refresh Token
 
-1. Navigate to **APIs & Services** → **Library**
-2. Search for and enable the following APIs:
-   - **Google Search Console API** (required)
-   - **Indexing API** (required for submit_url_for_indexing tool)
+Run the setup command and follow the browser authentication flow:
 
-### 3. Create OAuth 2.0 Credentials
+```bash
+npx -y google-search-console-mcp-setup
+```
 
-1. Go to **APIs & Services** → **Credentials**
-2. Click **+ CREATE CREDENTIALS** → **OAuth client ID**
-3. Select **Application type**: Desktop app
-4. Name it (e.g., "Google Search Console MCP")
-5. Click **Create**
-6. Copy the **Client ID** and **Client Secret**
+You'll be prompted to enter your `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_REDIRECT_URI`.
 
-### 4. Configure OAuth Consent Screen
+Copy the `GOOGLE_REFRESH_TOKEN` from the output and paste it into your `.mcp.json`.
 
-1. Go to **APIs & Services** → **OAuth consent screen**
-2. Add your email address to **Test users** section
-
-### 5. Add Redirect URI
-
-1. Go back to **Credentials**
-2. Click on your OAuth 2.0 Client ID
-3. Under **Authorized redirect URIs**, add:
-   ```
-   http://localhost:8080
-   ```
-4. Click **Save**
+Reload Claude Code window.
 
 ## Usage
 
@@ -173,12 +178,12 @@ Compare search performance metrics between two time periods (e.g., this week vs 
 **Example**:
 
 ```
-example.comの今週と先週のパフォーマンスを比較して
+Compare this week vs last week performance for example.com
 
-example.comの2025年1月と12月のクエリ別パフォーマンスを比較して
-（currentStartDate: 2025-01-01, currentEndDate: 2025-01-31,
-  previousStartDate: 2024-12-01, previousEndDate: 2024-12-31,
-  dimensions: ["query"]）
+Compare query performance for example.com between January 2025 and December 2024
+(currentStartDate: 2025-01-01, currentEndDate: 2025-01-31,
+ previousStartDate: 2024-12-01, previousEndDate: 2024-12-31,
+ dimensions: ["query"])
 ```
 
 ## API Limits
@@ -318,82 +323,6 @@ MIT
 ## Contributing
 
 Contributions are welcome! Please feel free to submit issues or pull requests.
-
-## Setup
-
-### 1. Get Google OAuth Credentials
-
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a project and enable **Google Search Console API** (and optionally **Indexing API**)
-3. Create **OAuth 2.0 Client ID** (Desktop app)
-4. Add `http://localhost:8080` to **Authorized redirect URIs**
-5. Add your email to **Test users** in OAuth consent screen
-
-### 2. Get Refresh Token
-
-Run this command with your credentials:
-
-```bash
-# Set your credentials
-export GOOGLE_CLIENT_ID="your-client-id"
-export GOOGLE_CLIENT_SECRET="your-secret"
-export GOOGLE_REDIRECT_URI="http://localhost:8080"
-
-# Get refresh token
-npx -y google-search-console-mcp-setup
-```
-
-Copy the `GOOGLE_REFRESH_TOKEN` from the output.
-
-### 3. Configure MCP
-
-#### For Claude Desktop
-
-Edit your config file:
-- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
-- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-
-```json
-{
-  "mcpServers": {
-    "google-search-console": {
-      "command": "npx",
-      "args": ["google-search-console-mcp-server"],
-      "env": {
-        "GOOGLE_CLIENT_ID": "your-client-id.apps.googleusercontent.com",
-        "GOOGLE_CLIENT_SECRET": "your-client-secret",
-        "GOOGLE_REDIRECT_URI": "http://localhost:8080",
-        "GOOGLE_REFRESH_TOKEN": "your-refresh-token"
-      }
-    }
-  }
-}
-```
-
-Restart Claude Desktop.
-
-#### For Claude Code
-
-Create `.mcp.json` in your project root:
-
-```json
-{
-  "mcpServers": {
-    "google-search-console": {
-      "command": "npx",
-      "args": ["google-search-console-mcp-server"],
-      "env": {
-        "GOOGLE_CLIENT_ID": "your-client-id.apps.googleusercontent.com",
-        "GOOGLE_CLIENT_SECRET": "your-client-secret",
-        "GOOGLE_REDIRECT_URI": "http://localhost:8080",
-        "GOOGLE_REFRESH_TOKEN": "your-refresh-token"
-      }
-    }
-  }
-}
-```
-
-Reload Claude Code window.
 
 ---
 
