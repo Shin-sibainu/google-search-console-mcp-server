@@ -66,7 +66,6 @@ Once configured, you can use the tools in Claude Desktop or Claude Code:
 Search Consoleのサイト一覧を取得して
 ```
 
-
 ## Available Tools
 
 ### 1. `list_sites`
@@ -342,11 +341,11 @@ Copy the `GOOGLE_REFRESH_TOKEN` from the output.
 
 ### 3. Configure MCP
 
-Add to your MCP config file:
+#### For Claude Desktop
 
-**Claude Desktop**: `%APPDATA%\Claude\claude_desktop_config.json` (Windows) or `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
-
-**Claude Code**: `.mcp.json` in your project root
+Edit your config file:
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 
 ```json
 {
@@ -365,7 +364,30 @@ Add to your MCP config file:
 }
 ```
 
-Restart Claude Desktop or reload Claude Code window.
+Restart Claude Desktop.
+
+#### For Claude Code
+
+Create `.mcp.json` in your project root:
+
+```json
+{
+  "mcpServers": {
+    "google-search-console": {
+      "command": "npx",
+      "args": ["google-search-console-mcp-server"],
+      "env": {
+        "GOOGLE_CLIENT_ID": "your-client-id.apps.googleusercontent.com",
+        "GOOGLE_CLIENT_SECRET": "your-client-secret",
+        "GOOGLE_REDIRECT_URI": "http://localhost:8080",
+        "GOOGLE_REFRESH_TOKEN": "your-refresh-token"
+      }
+    }
+  }
+}
+```
+
+Reload Claude Code window.
 
 ---
 
