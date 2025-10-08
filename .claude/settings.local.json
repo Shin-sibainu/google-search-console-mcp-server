@@ -16,7 +16,15 @@
       "Bash(git init:*)",
       "Bash(gh repo create:*)",
       "mcp__google-search-console__submit_url_for_indexing",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nInitial release v0.3.0\n\nFeatures:\n- 6 MCP tools for Google Search Console API\n- list_sites: Get all accessible Search Console properties\n- get_analytics: Query search performance data\n- get_sitemaps: Retrieve sitemap information\n- inspect_url: Inspect URL indexing status\n- submit_url_for_indexing: Request URL indexing/removal via Indexing API\n- compare_periods: Compare performance between two time periods\n\nTechnical:\n- OAuth 2.0 authentication with Google\n- Automatic retry logic with exponential backoff\n- Comprehensive error handling and validation\n- TypeScript with full type definitions\n- ESM module support\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(npm run setup-auth:*)",
+      "Bash(git push:*)",
+      "Bash(gh release create:*)",
+      "mcp__google-search-console__compare_periods",
+      "Bash(npm:*)",
+      "WebFetch(domain:www.npmjs.com)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
