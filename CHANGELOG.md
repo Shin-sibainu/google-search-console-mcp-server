@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2025-10-08
+
+### Added
+
+- **Simplified authentication setup**
+  - Added `google-search-console-mcp-setup` bin command
+  - Users can now run `npx -y google-search-console-mcp-setup` without global installation
+  - No need to clone repository or install locally for initial auth setup
+
+### Changed
+
+- Updated README.md with simplified authentication instructions
+- Build script now makes setup-auth.js executable
+
 ## [0.3.0] - 2025-10-08
 
 ### Added

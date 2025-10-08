@@ -83,37 +83,53 @@ npm run build
 
 ## Initial Authentication
 
-### 1. Create Environment File
+### Quick Setup (Recommended)
 
 ```bash
+# Set your credentials
+export GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+export GOOGLE_CLIENT_SECRET=your-client-secret
+export GOOGLE_REDIRECT_URI=http://localhost:8080
+
+# Run setup (no installation required!)
+npx -y google-search-console-mcp-setup
+```
+
+**Windows:**
+```bash
+set GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+set GOOGLE_CLIENT_SECRET=your-client-secret
+set GOOGLE_REDIRECT_URI=http://localhost:8080
+
+npx -y google-search-console-mcp-setup
+```
+
+**What happens:**
+1. A URL will open in your browser
+2. Sign in with your Google account
+3. Authorize the application
+4. You'll see "Authorization successful!"
+5. **Copy the `GOOGLE_REFRESH_TOKEN`** from the terminal
+
+### Alternative: Local Setup
+
+If you cloned the repository:
+
+```bash
+# 1. Create .env file
 cp .env.example .env
-```
 
-### 2. Edit `.env` File
+# 2. Edit .env with your credentials
+# GOOGLE_CLIENT_ID=...
+# GOOGLE_CLIENT_SECRET=...
+# GOOGLE_REDIRECT_URI=http://localhost:8080
 
-```env
-GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=your-client-secret
-GOOGLE_REDIRECT_URI=http://localhost:8080
-GOOGLE_REFRESH_TOKEN=
-```
-
-### 3. Run Authentication Setup
-
-```bash
+# 3. Run setup
+npm run build
 node build/auth/setup-auth.js
+
+# 4. Copy the GOOGLE_REFRESH_TOKEN to .env
 ```
-
-1. A URL will be displayed in the terminal
-2. Open the URL in your browser
-3. Sign in with your Google account
-4. Authorize the application
-5. You'll be redirected to localhost (showing "Authorization successful!")
-6. The terminal will display your refresh token
-
-### 4. Update `.env` with Refresh Token
-
-Copy the `GOOGLE_REFRESH_TOKEN` value from the terminal output and add it to your `.env` file.
 
 ## Usage with Claude Code
 
