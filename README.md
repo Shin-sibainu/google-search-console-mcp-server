@@ -22,22 +22,24 @@ A Model Context Protocol (MCP) server that provides programmatic access to Googl
 
 ## Installation
 
-### 1. Clone or Download
+### Option 1: NPM (Recommended)
 
 ```bash
-git clone <repository-url>
+npm install google-search-console-mcp-server
+```
+
+Or use with `npx` (no installation required):
+
+```bash
+npx google-search-console-mcp-server
+```
+
+### Option 2: From Source
+
+```bash
+git clone https://github.com/Shin-sibainu/google-search-console-mcp-server.git
 cd google-search-console-mcp-server
-```
-
-### 2. Install Dependencies
-
-```bash
 npm install
-```
-
-### 3. Build the Project
-
-```bash
 npm run build
 ```
 
@@ -150,7 +152,7 @@ Search Consoleのサイト一覧を取得して
 
 ## Usage with Claude Desktop
 
-### Configuration
+### Quick Start (Recommended)
 
 Edit your Claude Desktop config file:
 
@@ -161,8 +163,8 @@ Edit your Claude Desktop config file:
 {
   "mcpServers": {
     "google-search-console": {
-      "command": "node",
-      "args": ["/absolute/path/to/build/index.js"],
+      "command": "npx",
+      "args": ["google-search-console-mcp-server"],
       "env": {
         "GOOGLE_CLIENT_ID": "your-client-id.apps.googleusercontent.com",
         "GOOGLE_CLIENT_SECRET": "your-client-secret",
@@ -174,7 +176,33 @@ Edit your Claude Desktop config file:
 }
 ```
 
-Restart Claude Desktop and the tools will be available.
+### Alternative: Local Installation
+
+If you prefer to install locally:
+
+```bash
+npm install -g google-search-console-mcp-server
+```
+
+Then use in config:
+
+```json
+{
+  "mcpServers": {
+    "google-search-console": {
+      "command": "google-search-console-mcp",
+      "env": {
+        "GOOGLE_CLIENT_ID": "your-client-id.apps.googleusercontent.com",
+        "GOOGLE_CLIENT_SECRET": "your-client-secret",
+        "GOOGLE_REDIRECT_URI": "http://localhost:8080",
+        "GOOGLE_REFRESH_TOKEN": "your-refresh-token"
+      }
+    }
+  }
+}
+```
+
+**Note**: Restart Claude Desktop after editing the config file.
 
 ## Available Tools
 
