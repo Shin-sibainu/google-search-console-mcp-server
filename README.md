@@ -100,6 +100,7 @@ npx -y google-search-console-mcp-setup
 ```
 
 **Windows:**
+
 ```bash
 set GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
 set GOOGLE_CLIENT_SECRET=your-client-secret
@@ -109,6 +110,7 @@ npx -y google-search-console-mcp-setup
 ```
 
 **What happens:**
+
 1. A URL will open in your browser
 2. Sign in with your Google account
 3. Authorize the application
@@ -233,6 +235,7 @@ Get all Search Console sites you have access to.
 **Parameters**: None
 
 **Example**:
+
 ```
 Search Consoleのサイト一覧を教えて
 ```
@@ -242,6 +245,7 @@ Search Consoleのサイト一覧を教えて
 Query search performance data for a specified date range.
 
 **Parameters**:
+
 - `siteUrl` (required): Site URL (e.g., "https://example.com/")
 - `startDate` (required): Start date (YYYY-MM-DD)
 - `endDate` (required): End date (YYYY-MM-DD)
@@ -250,6 +254,7 @@ Query search performance data for a specified date range.
 - `startRow` (optional): Starting row for pagination
 
 **Example**:
+
 ```
 example.comの過去7日間のトップクエリを取得して
 
@@ -262,9 +267,11 @@ example.comの2025年1月1日から1月31日までの、
 Retrieve sitemap information for a site.
 
 **Parameters**:
+
 - `siteUrl` (required): Site URL
 
 **Example**:
+
 ```
 example.comのサイトマップ情報を確認して
 ```
@@ -274,10 +281,12 @@ example.comのサイトマップ情報を確認して
 Inspect the indexing status of a specific URL.
 
 **Parameters**:
+
 - `siteUrl` (required): Site URL (e.g., "https://example.com/")
 - `inspectionUrl` (required): Full URL to inspect
 
 **Example**:
+
 ```
 https://example.com/blog/article のインデックス状態を検査して
 ```
@@ -287,10 +296,12 @@ https://example.com/blog/article のインデックス状態を検査して
 Submit a URL to Google for indexing or request URL removal using the Indexing API.
 
 **Parameters**:
+
 - `url` (required): Full URL to submit (e.g., "https://example.com/page")
 - `type` (optional): Notification type - "URL_UPDATED" (default) or "URL_DELETED"
 
 **Example**:
+
 ```
 https://example.com/new-article をインデックスに送信して
 
@@ -304,6 +315,7 @@ https://example.com/old-page を削除申請して（type: URL_DELETED）
 Compare search performance metrics between two time periods (e.g., this week vs last week).
 
 **Parameters**:
+
 - `siteUrl` (required): Site URL (e.g., "https://example.com/")
 - `currentStartDate` (required): Current period start date (YYYY-MM-DD)
 - `currentEndDate` (required): Current period end date (YYYY-MM-DD)
@@ -313,6 +325,7 @@ Compare search performance metrics between two time periods (e.g., this week vs 
 - `rowLimit` (optional): Max rows (default: 100, max: 25000)
 
 **Example**:
+
 ```
 example.comの今週と先週のパフォーマンスを比較して
 
@@ -350,11 +363,13 @@ All tools validate inputs before making API calls:
 ### Detailed Error Messages
 
 Error messages include:
+
 - Clear description of what went wrong
 - HTTP status code
 - Actionable steps to resolve the issue
 
 Example:
+
 ```
 Access denied for list sites (403)
 Verify your authentication credentials and ensure you have access to this Search Console property.
@@ -378,6 +393,7 @@ Add your Google account email to the **Test users** section in OAuth consent scr
 ### "Invalid site URL format"
 
 Site URLs must be complete URLs like:
+
 - `https://example.com/` (for URL-prefix properties)
 - `sc-domain:example.com` (for domain properties)
 
@@ -388,6 +404,7 @@ Search Console data is only available for the last 16 months.
 ### "Rate limit exceeded"
 
 The tool will automatically retry with backoff. If you continue to hit limits:
+
 - Wait a few minutes between requests
 - Reduce `rowLimit` in analytics queries
 - API Limits: 2,000 requests/day, 600 requests/100 seconds
@@ -395,6 +412,7 @@ The tool will automatically retry with backoff. If you continue to hit limits:
 ### Token Expired
 
 Re-run the authentication setup:
+
 ```bash
 node build/auth/setup-auth.js
 ```
@@ -466,21 +484,25 @@ Follow these steps to get the Google Search Console MCP Server running:
 #### Step 1: Google Cloud Console Setup
 
 1. **Go to Google Cloud Console**
+
    - Visit: https://console.cloud.google.com/
    - Sign in with your Google account
 
 2. **Create a New Project**
+
    - Click "Select a project" → "New Project"
    - Name: `Google Search Console MCP` (or any name)
    - Click "Create"
 
 3. **Enable Required APIs**
+
    - Navigate to: **APIs & Services** → **Library**
    - Search and enable:
      - ✅ **Google Search Console API** (required)
      - ✅ **Indexing API** (optional, for `submit_url_for_indexing` tool)
 
 4. **Create OAuth 2.0 Credentials**
+
    - Go to: **APIs & Services** → **Credentials**
    - Click: **+ CREATE CREDENTIALS** → **OAuth client ID**
    - Application type: **Desktop app**
@@ -489,6 +511,7 @@ Follow these steps to get the Google Search Console MCP Server running:
    - **Save the Client ID and Client Secret** (you'll need these!)
 
 5. **Configure OAuth Consent Screen**
+
    - Go to: **APIs & Services** → **OAuth consent screen**
    - Click **+ ADD USERS** under "Test users"
    - Add your Google account email address
@@ -508,6 +531,7 @@ Follow these steps to get the Google Search Console MCP Server running:
 Open your terminal and run:
 
 **For macOS/Linux:**
+
 ```bash
 # Set environment variables
 export GOOGLE_CLIENT_ID="your-client-id.apps.googleusercontent.com"
@@ -519,6 +543,7 @@ npx -y google-search-console-mcp-setup
 ```
 
 **For Windows (Command Prompt):**
+
 ```bash
 # Set environment variables
 set GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
@@ -530,6 +555,7 @@ npx -y google-search-console-mcp-setup
 ```
 
 **For Windows (PowerShell):**
+
 ```powershell
 # Set environment variables
 $env:GOOGLE_CLIENT_ID="your-client-id.apps.googleusercontent.com"
@@ -541,6 +567,7 @@ npx -y google-search-console-mcp-setup
 ```
 
 **What happens next:**
+
 1. A URL will be displayed in the terminal
 2. Your browser will open automatically (or copy/paste the URL)
 3. Sign in with your Google account
@@ -559,6 +586,7 @@ Choose your platform:
 ##### **Option A: Claude Desktop**
 
 1. **Locate your config file:**
+
    - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
    - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
    - **Linux**: `~/.config/Claude/claude_desktop_config.json`
@@ -583,6 +611,7 @@ Choose your platform:
 ```
 
 3. **Replace the values:**
+
    - `your-client-id.apps.googleusercontent.com` → Your Client ID from Step 1
    - `your-client-secret` → Your Client Secret from Step 1
    - `paste-your-refresh-token-here` → The refresh token from Step 2
@@ -640,21 +669,26 @@ If you see a list of your sites, **congratulations! Setup complete!** 🎉
 ### Troubleshooting
 
 #### "MCP server failed to start"
+
 - Check that all environment variables are correct (no extra spaces)
 - Make sure you copied the entire refresh token
 - Verify Node.js is installed: `node --version` (requires v18+)
 
 #### "Error 403: access_denied"
+
 - Add your email to Test users in OAuth consent screen (Step 1-5)
 
 #### "redirect_uri_mismatch"
+
 - Ensure `http://localhost:8080` is in Authorized redirect URIs (Step 1-6)
 
 #### "Indexing API not enabled"
+
 - Enable Indexing API in Google Cloud Console (Step 1-3)
 - Re-run the authentication setup to get a new token with Indexing scope
 
 #### Still having issues?
+
 - Check the logs:
   - **Windows**: `%APPDATA%\Claude\logs\mcp*.log`
   - **macOS**: `~/Library/Logs/Claude/mcp*.log`
