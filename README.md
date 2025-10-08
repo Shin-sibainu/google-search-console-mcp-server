@@ -66,59 +66,6 @@ Once configured, you can use the tools in Claude Desktop or Claude Code:
 Search Consoleのサイト一覧を取得して
 ```
 
-## Usage with Claude Desktop
-
-### Quick Start (Recommended)
-
-Edit your Claude Desktop config file:
-
-**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
-**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-
-```json
-{
-  "mcpServers": {
-    "google-search-console": {
-      "command": "npx",
-      "args": ["google-search-console-mcp-server"],
-      "env": {
-        "GOOGLE_CLIENT_ID": "your-client-id.apps.googleusercontent.com",
-        "GOOGLE_CLIENT_SECRET": "your-client-secret",
-        "GOOGLE_REDIRECT_URI": "http://localhost:8080",
-        "GOOGLE_REFRESH_TOKEN": "your-refresh-token"
-      }
-    }
-  }
-}
-```
-
-### Alternative: Local Installation
-
-If you prefer to install locally:
-
-```bash
-npm install -g google-search-console-mcp-server
-```
-
-Then use in config:
-
-```json
-{
-  "mcpServers": {
-    "google-search-console": {
-      "command": "google-search-console-mcp",
-      "env": {
-        "GOOGLE_CLIENT_ID": "your-client-id.apps.googleusercontent.com",
-        "GOOGLE_CLIENT_SECRET": "your-client-secret",
-        "GOOGLE_REDIRECT_URI": "http://localhost:8080",
-        "GOOGLE_REFRESH_TOKEN": "your-refresh-token"
-      }
-    }
-  }
-}
-```
-
-**Note**: Restart Claude Desktop after editing the config file.
 
 ## Available Tools
 
