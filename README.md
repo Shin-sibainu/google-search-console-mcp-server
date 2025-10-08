@@ -2,6 +2,10 @@
 
 A Model Context Protocol (MCP) server that provides programmatic access to Google Search Console API data through Claude Code and Cursor.
 
+## Quick Start
+
+**New to this MCP server?** Jump to [Step-by-Step Setup Guide](#step-by-step-setup-guide) for complete instructions.
+
 ## Features
 
 - 🔍 **List Sites** - Get all Search Console properties you have access to
@@ -450,6 +454,213 @@ MIT
 ## Contributing
 
 Contributions are welcome! Please feel free to submit issues or pull requests.
+
+## Step-by-Step Setup Guide
+
+### Complete Setup for Claude Desktop or Claude Code
+
+Follow these steps to get the Google Search Console MCP Server running:
+
+---
+
+#### Step 1: Google Cloud Console Setup
+
+1. **Go to Google Cloud Console**
+   - Visit: https://console.cloud.google.com/
+   - Sign in with your Google account
+
+2. **Create a New Project**
+   - Click "Select a project" → "New Project"
+   - Name: `Google Search Console MCP` (or any name)
+   - Click "Create"
+
+3. **Enable Required APIs**
+   - Navigate to: **APIs & Services** → **Library**
+   - Search and enable:
+     - ✅ **Google Search Console API** (required)
+     - ✅ **Indexing API** (optional, for `submit_url_for_indexing` tool)
+
+4. **Create OAuth 2.0 Credentials**
+   - Go to: **APIs & Services** → **Credentials**
+   - Click: **+ CREATE CREDENTIALS** → **OAuth client ID**
+   - Application type: **Desktop app**
+   - Name: `Google Search Console MCP` (or any name)
+   - Click **Create**
+   - **Save the Client ID and Client Secret** (you'll need these!)
+
+5. **Configure OAuth Consent Screen**
+   - Go to: **APIs & Services** → **OAuth consent screen**
+   - Click **+ ADD USERS** under "Test users"
+   - Add your Google account email address
+   - Click **Save**
+
+6. **Add Redirect URI**
+   - Go back to: **APIs & Services** → **Credentials**
+   - Click on your OAuth 2.0 Client ID
+   - Under **Authorized redirect URIs**, click **+ ADD URI**
+   - Add: `http://localhost:8080`
+   - Click **Save**
+
+---
+
+#### Step 2: Get Authentication Token
+
+Open your terminal and run:
+
+**For macOS/Linux:**
+```bash
+# Set environment variables
+export GOOGLE_CLIENT_ID="your-client-id.apps.googleusercontent.com"
+export GOOGLE_CLIENT_SECRET="your-client-secret"
+export GOOGLE_REDIRECT_URI="http://localhost:8080"
+
+# Run authentication setup (no installation required!)
+npx -y google-search-console-mcp-setup
+```
+
+**For Windows (Command Prompt):**
+```bash
+# Set environment variables
+set GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+set GOOGLE_CLIENT_SECRET=your-client-secret
+set GOOGLE_REDIRECT_URI=http://localhost:8080
+
+# Run authentication setup
+npx -y google-search-console-mcp-setup
+```
+
+**For Windows (PowerShell):**
+```powershell
+# Set environment variables
+$env:GOOGLE_CLIENT_ID="your-client-id.apps.googleusercontent.com"
+$env:GOOGLE_CLIENT_SECRET="your-client-secret"
+$env:GOOGLE_REDIRECT_URI="http://localhost:8080"
+
+# Run authentication setup
+npx -y google-search-console-mcp-setup
+```
+
+**What happens next:**
+1. A URL will be displayed in the terminal
+2. Your browser will open automatically (or copy/paste the URL)
+3. Sign in with your Google account
+4. Click "Allow" to grant permissions
+5. You'll see "Authorization successful!" in the browser
+6. The terminal will display your `GOOGLE_REFRESH_TOKEN`
+
+**Important:** Copy the `GOOGLE_REFRESH_TOKEN` - you'll need it in the next step!
+
+---
+
+#### Step 3: Configure Claude Desktop or Claude Code
+
+Choose your platform:
+
+##### **Option A: Claude Desktop**
+
+1. **Locate your config file:**
+   - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+   - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+   - **Linux**: `~/.config/Claude/claude_desktop_config.json`
+
+2. **Edit the config file** (create it if it doesn't exist):
+
+```json
+{
+  "mcpServers": {
+    "google-search-console": {
+      "command": "npx",
+      "args": ["google-search-console-mcp-server"],
+      "env": {
+        "GOOGLE_CLIENT_ID": "your-client-id.apps.googleusercontent.com",
+        "GOOGLE_CLIENT_SECRET": "your-client-secret",
+        "GOOGLE_REDIRECT_URI": "http://localhost:8080",
+        "GOOGLE_REFRESH_TOKEN": "paste-your-refresh-token-here"
+      }
+    }
+  }
+}
+```
+
+3. **Replace the values:**
+   - `your-client-id.apps.googleusercontent.com` → Your Client ID from Step 1
+   - `your-client-secret` → Your Client Secret from Step 1
+   - `paste-your-refresh-token-here` → The refresh token from Step 2
+
+4. **Restart Claude Desktop**
+
+##### **Option B: Claude Code**
+
+1. **Create `.mcp.json` in your project root:**
+
+```json
+{
+  "mcpServers": {
+    "google-search-console": {
+      "command": "npx",
+      "args": ["google-search-console-mcp-server"],
+      "env": {
+        "GOOGLE_CLIENT_ID": "your-client-id.apps.googleusercontent.com",
+        "GOOGLE_CLIENT_SECRET": "your-client-secret",
+        "GOOGLE_REDIRECT_URI": "http://localhost:8080",
+        "GOOGLE_REFRESH_TOKEN": "paste-your-refresh-token-here"
+      }
+    }
+  }
+}
+```
+
+2. **Replace the values** (same as Claude Desktop)
+
+3. **Reload Claude Code window**
+   - Press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (macOS)
+   - Type: "Reload Window"
+   - Press Enter
+
+---
+
+#### Step 4: Test the Connection
+
+In Claude Desktop or Claude Code, try:
+
+```
+Search Consoleのサイト一覧を教えて
+```
+
+Or:
+
+```
+Show me my Google Search Console sites
+```
+
+If you see a list of your sites, **congratulations! Setup complete!** 🎉
+
+---
+
+### Troubleshooting
+
+#### "MCP server failed to start"
+- Check that all environment variables are correct (no extra spaces)
+- Make sure you copied the entire refresh token
+- Verify Node.js is installed: `node --version` (requires v18+)
+
+#### "Error 403: access_denied"
+- Add your email to Test users in OAuth consent screen (Step 1-5)
+
+#### "redirect_uri_mismatch"
+- Ensure `http://localhost:8080` is in Authorized redirect URIs (Step 1-6)
+
+#### "Indexing API not enabled"
+- Enable Indexing API in Google Cloud Console (Step 1-3)
+- Re-run the authentication setup to get a new token with Indexing scope
+
+#### Still having issues?
+- Check the logs:
+  - **Windows**: `%APPDATA%\Claude\logs\mcp*.log`
+  - **macOS**: `~/Library/Logs/Claude/mcp*.log`
+- Open an issue: https://github.com/Shin-sibainu/google-search-console-mcp-server/issues
+
+---
 
 ## Resources
 
