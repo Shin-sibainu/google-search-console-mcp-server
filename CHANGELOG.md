@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.2] - 2025-10-08
+
+### Changed
+
+- **Simplified README setup instructions**
+  - Moved `.mcp.json` configuration to Step 1 for better clarity
+  - Removed export commands (replaced with interactive prompts in setup)
+  - Focused documentation on Claude Code usage
+  - Translated all usage examples to English for international users
+  - Streamlined setup flow: config → credentials → token
+
 ## [0.3.1] - 2025-10-08
 
 ### Added
