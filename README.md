@@ -58,36 +58,9 @@ A Model Context Protocol (MCP) server that provides programmatic access to Googl
    ```
 4. Click **Save**
 
-## Usage with Claude Code
+## Usage
 
-### 1. Create `.mcp.json` (for local development)
-
-```bash
-cp .mcp.json.example .mcp.json
-```
-
-Edit `.mcp.json` with your credentials:
-
-```json
-{
-  "mcpServers": {
-    "google-search-console": {
-      "command": "node",
-      "args": ["build/index.js"],
-      "env": {
-        "GOOGLE_CLIENT_ID": "your-client-id.apps.googleusercontent.com",
-        "GOOGLE_CLIENT_SECRET": "your-client-secret",
-        "GOOGLE_REDIRECT_URI": "http://localhost:8080",
-        "GOOGLE_REFRESH_TOKEN": "your-refresh-token"
-      }
-    }
-  }
-}
-```
-
-### 2. Use in Claude Code
-
-Open the project in Claude Code and start using the tools:
+Once configured, you can use the tools in Claude Desktop or Claude Code:
 
 ```
 Search Consoleのサイト一覧を取得して
