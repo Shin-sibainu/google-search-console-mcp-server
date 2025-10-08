@@ -63,7 +63,13 @@ A Model Context Protocol (MCP) server that provides programmatic access to Googl
 Once configured, you can use the tools in Claude Desktop or Claude Code:
 
 ```
-Search Consoleのサイト一覧を取得して
+Show me my Google Search Console sites
+```
+
+or
+
+```
+Get search performance data for example.com for the last 7 days
 ```
 
 ## Available Tools
