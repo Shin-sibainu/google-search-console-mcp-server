@@ -7,19 +7,61 @@
 
 import http from 'http';
 import { URL } from 'url';
-import { createAuthClient, getAuthUrl, getTokensFromCode } from './google-auth.js';
+import readline from 'readline';
+import { google } from 'googleapis';
+import { getAuthUrl, getTokensFromCode } from './google-auth.js';
 
-const PORT = 8080;
+/**
+ * Prompt for user input
+ */
+function prompt(question: string, defaultValue?: string): Promise<string> {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  return new Promise((resolve) => {
+    const displayQuestion = defaultValue
+      ? `${question} (default: ${defaultValue}): `
+      : `${question}: `;
+
+    rl.question(displayQuestion, (answer) => {
+      rl.close();
+      resolve(answer.trim() || defaultValue || '');
+    });
+  });
+}
 
 async function main() {
   console.log('='.repeat(60));
   console.log('Google Search Console MCP Server - Authentication Setup');
   console.log('='.repeat(60));
   console.log();
+  console.log('Enter your Google OAuth credentials:');
+  console.log();
 
   try {
+    // Get credentials interactively
+    const clientId = process.env.GOOGLE_CLIENT_ID || await prompt('GOOGLE_CLIENT_ID');
+    const clientSecret = process.env.GOOGLE_CLIENT_SECRET || await prompt('GOOGLE_CLIENT_SECRET');
+    const redirectUri = process.env.GOOGLE_REDIRECT_URI || await prompt('GOOGLE_REDIRECT_URI', 'http://localhost:8080');
+
+    if (!clientId || !clientSecret) {
+      throw new Error('GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET are required');
+    }
+
+    console.log();
+
+    // Extract port from redirect URI
+    const redirectUrl = new URL(redirectUri);
+    const PORT = parseInt(redirectUrl.port || '8080', 10);
+
     // Create OAuth2 client
-    const oauth2Client = createAuthClient();
+    const oauth2Client = new google.auth.OAuth2(
+      clientId,
+      clientSecret,
+      redirectUri
+    );
 
     // Generate authorization URL
     const authUrl = getAuthUrl(oauth2Client);
@@ -28,7 +70,7 @@ async function main() {
     console.log();
     console.log(authUrl);
     console.log();
-    console.log(`Step 2: Waiting for authorization on http://localhost:${PORT}...`);
+    console.log(`Step 2: Waiting for authorization on ${redirectUri}...`);
     console.log();
 
     // Create HTTP server to receive the authorization code
@@ -75,9 +117,26 @@ async function main() {
     console.log('Success! Authentication completed.');
     console.log('='.repeat(60));
     console.log();
-    console.log('Add the following to your .env file:');
+    console.log('Add the following to your .mcp.json:');
     console.log();
+    console.log(`GOOGLE_CLIENT_ID=${clientId}`);
+    console.log(`GOOGLE_CLIENT_SECRET=${clientSecret}`);
     console.log(`GOOGLE_REFRESH_TOKEN=${tokens.refresh_token}`);
+    console.log();
+    console.log('Example .mcp.json:');
+    console.log(JSON.stringify({
+      mcpServers: {
+        'google-search-console': {
+          command: 'npx',
+          args: ['google-search-console-mcp-server'],
+          env: {
+            GOOGLE_CLIENT_ID: clientId,
+            GOOGLE_CLIENT_SECRET: clientSecret,
+            GOOGLE_REFRESH_TOKEN: tokens.refresh_token
+          }
+        }
+      }
+    }, null, 2));
     console.log();
     console.log('='.repeat(60));
   } catch (error: any) {

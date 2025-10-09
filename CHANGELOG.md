@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.4] - 2025-10-08
+
+### Changed
+
+- **Interactive setup command**
+  - No longer requires environment variables to be set beforehand
+  - Prompts user for CLIENT_ID, CLIENT_SECRET, and REDIRECT_URI interactively
+  - REDIRECT_URI defaults to `http://localhost:8080` (just press Enter)
+  - Outputs complete `.mcp.json` configuration after successful authentication
+  - Displays all three credentials (CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN) for easy copy-paste
+
+### Improved
+
+- **Better user experience**
+  - Single command execution: `npx -y -p google-search-console-mcp-server google-search-console-mcp-setup`
+  - No need to manually export environment variables
+  - Complete JSON configuration output ready to paste into `.mcp.json`
+
 ## [0.3.3] - 2025-10-08
 
 ### Added

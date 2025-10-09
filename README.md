@@ -71,17 +71,20 @@ Create `.mcp.json` in your project root:
 
 ### 3. Get Refresh Token
 
-Set your credentials as environment variables and run the setup command:
+Run the interactive setup command:
 
 ```bash
-export GOOGLE_CLIENT_ID="your-client-id"
-export GOOGLE_CLIENT_SECRET="your-client-secret"
-npx -y google-search-console-mcp-setup
+npx -y -p google-search-console-mcp-server google-search-console-mcp-setup
 ```
 
-A browser window will open for authentication. After authorizing, copy the `GOOGLE_REFRESH_TOKEN` from the terminal output and paste it into your `.mcp.json`.
+You'll be prompted to enter:
+- `GOOGLE_CLIENT_ID` (from step 2)
+- `GOOGLE_CLIENT_SECRET` (from step 2)
+- `GOOGLE_REDIRECT_URI` (press Enter for default: `http://localhost:8080`)
 
-Reload Claude Code window.
+A browser window will open for authentication. After authorizing, the command will output the complete `.mcp.json` configuration with all three credentials including the `GOOGLE_REFRESH_TOKEN`.
+
+Copy the configuration and paste it into your `.mcp.json`, then reload Claude Code window.
 
 ## Usage
 
