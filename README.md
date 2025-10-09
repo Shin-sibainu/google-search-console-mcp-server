@@ -18,6 +18,25 @@ A Model Context Protocol (MCP) server that provides programmatic access to Googl
 - 🔄 **Automatic Retry Logic** - Handles rate limits and transient failures
 - ✅ **Input Validation** - Validates all parameters before API calls
 
+## Prerequisites
+
+Before using this MCP server, you need:
+
+### 1. Google Search Console
+
+- Site registered in Search Console
+- Site ownership verified
+- Access to the Search Console property you want to query
+
+### 2. Google Cloud Platform (GCP)
+
+- A GCP project (free tier is sufficient)
+- **Google Search Console API** enabled
+- **OAuth 2.0 Client ID** credentials (Desktop app type)
+- (Optional) **Indexing API** enabled if you want to use `submit_url_for_indexing`
+
+💡 **Note**: You only need to set up GCP once. The `CLIENT_ID` and `CLIENT_SECRET` are reusable across multiple sites in your Search Console.
+
 ## Setup
 
 ### 1. Configure Claude Code
@@ -33,13 +52,14 @@ Create `.mcp.json` in your project root:
       "env": {
         "GOOGLE_CLIENT_ID": "your-client-id.apps.googleusercontent.com",
         "GOOGLE_CLIENT_SECRET": "your-client-secret",
-        "GOOGLE_REDIRECT_URI": "http://localhost:8080",
         "GOOGLE_REFRESH_TOKEN": "your-refresh-token"
       }
     }
   }
 }
 ```
+
+💡 **Note**: `GOOGLE_REDIRECT_URI` defaults to `http://localhost:8080` and doesn't need to be specified unless you want to use a different port.
 
 ### 2. Get Google OAuth Credentials
 
@@ -51,15 +71,15 @@ Create `.mcp.json` in your project root:
 
 ### 3. Get Refresh Token
 
-Run the setup command and follow the browser authentication flow:
+Set your credentials as environment variables and run the setup command:
 
 ```bash
+export GOOGLE_CLIENT_ID="your-client-id"
+export GOOGLE_CLIENT_SECRET="your-client-secret"
 npx -y google-search-console-mcp-setup
 ```
 
-You'll be prompted to enter your `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_REDIRECT_URI`.
-
-Copy the `GOOGLE_REFRESH_TOKEN` from the output and paste it into your `.mcp.json`.
+A browser window will open for authentication. After authorizing, copy the `GOOGLE_REFRESH_TOKEN` from the terminal output and paste it into your `.mcp.json`.
 
 Reload Claude Code window.
 
