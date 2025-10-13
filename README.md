@@ -68,7 +68,7 @@ Create `.mcp.json` in your project root:
 
 ### 2. Get Google OAuth Credentials
 
-⚠️ **Important**: If you're already using OAuth 2.0 for other services (Supabase, Firebase, etc.), **create a new OAuth 2.0 Client ID specifically for this MCP server**. Don't reuse existing credentials.
+💡 **Tip**: You can use an existing OAuth 2.0 Client ID from other services (Supabase, Firebase, etc.) or create a new one.
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
 2. **Create or select a project**
@@ -76,23 +76,25 @@ Create `.mcp.json` in your project root:
    - Navigate to "APIs & Services" → "Enable APIs and Services"
    - Search and enable **"Google Search Console API"**
    - (Optional) Enable **"Indexing API"** if you want to use `submit_url_for_indexing`
-4. **Create OAuth 2.0 Client ID**:
+4. **Create or use existing OAuth 2.0 Client ID**:
    - Go to "APIs & Services" → "Credentials"
-   - Click "Create Credentials" → "OAuth 2.0 Client ID"
-   - Application type: **Desktop app**
-   - Name: `MCP Server` (or any name you prefer)
+   - **Option A**: Use existing OAuth 2.0 Client (skip to step 5)
+   - **Option B**: Create new → "OAuth 2.0 Client ID" → Application type: **Desktop app**
 5. **Configure Authorized redirect URIs**:
-   - Click on the created OAuth 2.0 Client ID
+   - Click on the OAuth 2.0 Client ID
    - Under "Authorized redirect URIs", click "Add URI"
    - Add: `http://localhost:8080` (no trailing slash!)
    - Click "Save"
-6. **Add test users** (if OAuth consent screen is in Testing mode):
+6. ⚠️ **IMPORTANT: Add test users** (if OAuth consent screen is in Testing mode):
    - Go to "OAuth consent screen"
+   - Check the "Publishing status" - if it shows **"Testing"**:
    - Scroll to "Test users" section
-   - Add your Google account email
+   - Click "+ ADD USERS"
+   - Add your Google account email (the one you'll use to authenticate)
    - Click "Save"
+   - **Without this step, you'll get `access_denied` errors!**
 
-💾 **Save your credentials**: Copy the `CLIENT_ID` and `CLIENT_SECRET` displayed after creation. You'll need them in the next step.
+💾 **Save your credentials**: Copy the `CLIENT_ID` and `CLIENT_SECRET`. You'll need them in the next step.
 
 ### 3. Get Refresh Token
 
@@ -289,9 +291,10 @@ You may need to add your account as a test user in Google Cloud Console.
    - Verify they're from the same OAuth 2.0 Client in GCP Console
    - Copy them again directly from Google Cloud Console
 
-2. **Reusing credentials from other services** (Supabase, Firebase, etc.)
-   - **Solution**: Create a new OAuth 2.0 Client ID specifically for this MCP server
-   - The redirect URIs for other services (e.g., `https://xxx.supabase.co/auth/v1/callback`) won't work with `http://localhost:8080`
+2. **Missing `http://localhost:8080` in Authorized redirect URIs**
+   - If you're reusing OAuth credentials from other services (Supabase, Firebase, etc.)
+   - **Solution**: Add `http://localhost:8080` to "Authorized redirect URIs" in the OAuth 2.0 Client settings
+   - You can have multiple redirect URIs (e.g., `https://xxx.supabase.co/auth/v1/callback` AND `http://localhost:8080`)
 
 3. **CLIENT_SECRET was regenerated**
    - If you reset the secret in GCP Console, use the new one
@@ -352,7 +355,13 @@ Ensure `http://localhost:8080` (no trailing slash!) is added to **Authorized red
 
 #### "Error 403: access_denied"
 
-1. **OAuth consent screen is in Testing mode**: Add your Google account email to the **Test users** section
+1. ⚠️ **Most common cause - OAuth consent screen is in Testing mode**:
+   - Go to "OAuth consent screen" in GCP Console
+   - If "Publishing status" shows **"Testing"**, you MUST add your email to "Test users"
+   - Click "+ ADD USERS" in the "Test users" section
+   - Add your Google account email (the one you're authenticating with)
+   - Click "Save"
+   - **This is the #1 cause of access_denied errors!**
 2. **API not enabled**: Enable "Google Search Console API" in GCP Console
 3. **No access to the site**: Verify you have access to the Search Console property you're querying
 

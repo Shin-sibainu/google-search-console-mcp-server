@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.8] - 2025-10-13
+
+### Changed
+
+- **OAuth credentials reuse clarification**:
+  - Removed warning against reusing OAuth credentials from other services
+  - Clarified that existing OAuth 2.0 Client IDs (from Supabase, Firebase, etc.) can be reused
+  - Just need to add `http://localhost:8080` to Authorized redirect URIs
+- **Test users setup emphasis**:
+  - Added ⚠️ warnings emphasizing the importance of adding test users in Testing mode
+  - Clarified that `access_denied` errors are most commonly caused by missing test user setup
+  - Added step-by-step instructions for adding test users
+  - Marked this as "#1 cause of access_denied errors" in troubleshooting
+
 ## [0.3.7] - 2025-10-13
 
 ### Improved
