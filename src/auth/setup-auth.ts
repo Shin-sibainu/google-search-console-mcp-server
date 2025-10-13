@@ -22,7 +22,7 @@ function prompt(question: string, defaultValue?: string): Promise<string> {
 
   return new Promise((resolve) => {
     const displayQuestion = defaultValue
-      ? `${question} (default: ${defaultValue}): `
+      ? `${question} [press Enter for default: ${defaultValue}]: `
       : `${question}: `;
 
     rl.question(displayQuestion, (answer) => {
