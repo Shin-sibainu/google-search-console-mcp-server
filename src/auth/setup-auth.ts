@@ -142,6 +142,19 @@ async function main() {
   } catch (error: any) {
     console.error();
     console.error('Error during authentication:', error.message);
+
+    // Display detailed error information for debugging
+    if (error.response) {
+      console.error('\nDetailed error information:');
+      console.error('Status:', error.response.status);
+      console.error('Data:', JSON.stringify(error.response.data, null, 2));
+    }
+
+    if (error.code) {
+      console.error('Error code:', error.code);
+    }
+
+    console.error('\nFull error:', error);
     process.exit(1);
   }
 }
