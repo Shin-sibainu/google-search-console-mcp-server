@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.6] - 2025-10-13
+
+### Changed
+
+- **Comprehensive README improvements**
+  - **Fixed `.mcp.json` configuration**: Corrected `args` to include all three required parts (`"-y"`, `"-p", "google-search-console-mcp-server"`, `"google-search-console-mcp"`)
+  - **Enhanced Setup section**: Added detailed step-by-step instructions with important warnings
+  - **Expanded OAuth setup guide**:
+    - Warning about reusing credentials from other services (Supabase, Firebase)
+    - Explicit instructions to enable Search Console API
+    - Clear guidance on Authorized redirect URIs configuration
+    - Test users setup instructions
+  - **Comprehensive Troubleshooting section**: Added solutions for common issues:
+    - `invalid_client` error (with multiple causes and solutions)
+    - `could not determine executable to run` error
+    - MCP server connection failures (with debugging steps)
+    - Search Console API not enabled
+    - Runtime errors with detailed solutions
+
+### Improved
+
+- **User experience**: README now addresses all common setup pitfalls based on real user feedback
+- **Error diagnosis**: Added manual testing instructions for troubleshooting MCP connection issues
+- **Clarity**: Explained why package name and executable name are different
+
 ## [0.3.5] - 2025-10-13
 
 ### Improved

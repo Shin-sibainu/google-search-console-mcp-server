@@ -48,7 +48,7 @@ Create `.mcp.json` in your project root:
   "mcpServers": {
     "google-search-console": {
       "command": "npx",
-      "args": ["google-search-console-mcp-server"],
+      "args": ["-y", "-p", "google-search-console-mcp-server", "google-search-console-mcp"],
       "env": {
         "GOOGLE_CLIENT_ID": "your-client-id.apps.googleusercontent.com",
         "GOOGLE_CLIENT_SECRET": "your-client-secret",
@@ -59,15 +59,40 @@ Create `.mcp.json` in your project root:
 }
 ```
 
+⚠️ **Important**: The `args` must include all three parts:
+1. `"-y"` - Auto-confirm npx prompt
+2. `"-p", "google-search-console-mcp-server"` - Package name
+3. `"google-search-console-mcp"` - Executable name (different from package name!)
+
 💡 **Note**: `GOOGLE_REDIRECT_URI` defaults to `http://localhost:8080` and doesn't need to be specified unless you want to use a different port.
 
 ### 2. Get Google OAuth Credentials
 
+⚠️ **Important**: If you're already using OAuth 2.0 for other services (Supabase, Firebase, etc.), **create a new OAuth 2.0 Client ID specifically for this MCP server**. Don't reuse existing credentials.
+
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a project and enable **Google Search Console API** (and optionally **Indexing API**)
-3. Create **OAuth 2.0 Client ID** (Desktop app)
-4. Add `http://localhost:8080` to **Authorized redirect URIs**
-5. Add your email to **Test users** in OAuth consent screen
+2. **Create or select a project**
+3. **Enable APIs**:
+   - Navigate to "APIs & Services" → "Enable APIs and Services"
+   - Search and enable **"Google Search Console API"**
+   - (Optional) Enable **"Indexing API"** if you want to use `submit_url_for_indexing`
+4. **Create OAuth 2.0 Client ID**:
+   - Go to "APIs & Services" → "Credentials"
+   - Click "Create Credentials" → "OAuth 2.0 Client ID"
+   - Application type: **Desktop app**
+   - Name: `MCP Server` (or any name you prefer)
+5. **Configure Authorized redirect URIs**:
+   - Click on the created OAuth 2.0 Client ID
+   - Under "Authorized redirect URIs", click "Add URI"
+   - Add: `http://localhost:8080` (no trailing slash!)
+   - Click "Save"
+6. **Add test users** (if OAuth consent screen is in Testing mode):
+   - Go to "OAuth consent screen"
+   - Scroll to "Test users" section
+   - Add your Google account email
+   - Click "Save"
+
+💾 **Save your credentials**: Copy the `CLIENT_ID` and `CLIENT_SECRET` displayed after creation. You'll need them in the next step.
 
 ### 3. Get Refresh Token
 
@@ -252,30 +277,97 @@ You may need to add your account as a test user in Google Cloud Console.
 
 ## Troubleshooting
 
-### "Missing required environment variables"
+### Setup Issues
 
-Make sure your `.env` file exists and contains valid `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`.
+#### "invalid_client" Error During Authentication
 
-### "redirect_uri_mismatch"
+**Problem**: When running the setup command, you get `Error during authentication: invalid_client`.
 
-Ensure `http://localhost:8080` is added to **Authorized redirect URIs** in Google Cloud Console.
+**Causes & Solutions**:
 
-### "Error 403: access_denied"
+1. **CLIENT_ID and CLIENT_SECRET mismatch**
+   - Verify they're from the same OAuth 2.0 Client in GCP Console
+   - Copy them again directly from Google Cloud Console
 
-Add your Google account email to the **Test users** section in OAuth consent screen.
+2. **Reusing credentials from other services** (Supabase, Firebase, etc.)
+   - **Solution**: Create a new OAuth 2.0 Client ID specifically for this MCP server
+   - The redirect URIs for other services (e.g., `https://xxx.supabase.co/auth/v1/callback`) won't work with `http://localhost:8080`
 
-### "Invalid site URL format"
+3. **CLIENT_SECRET was regenerated**
+   - If you reset the secret in GCP Console, use the new one
+   - Old secrets become invalid immediately
+
+#### "could not determine executable to run" Error
+
+**Problem**: `npx google-search-console-mcp-server` fails with "could not determine executable to run".
+
+**Solution**: The package name and executable name are different. Use the correct `.mcp.json` configuration:
+
+```json
+{
+  "mcpServers": {
+    "google-search-console": {
+      "command": "npx",
+      "args": ["-y", "-p", "google-search-console-mcp-server", "google-search-console-mcp"],
+      "env": { ... }
+    }
+  }
+}
+```
+
+#### MCP Server Shows "✘ failed" in Claude Code
+
+**Debugging steps**:
+
+1. **Check the error details**:
+   - In Claude Code's MCP status screen, press Enter on the failed server
+   - Scroll down to see the stderr (error output)
+
+2. **Test manually**:
+   ```bash
+   cd your-project-directory
+   export GOOGLE_CLIENT_ID="your-id"
+   export GOOGLE_CLIENT_SECRET="your-secret"
+   export GOOGLE_REFRESH_TOKEN="your-token"
+   npx -y google-search-console-mcp-server
+   ```
+
+3. **Common causes**:
+   - **Search Console API not enabled**: Enable it in GCP Console
+   - **Wrong credentials**: Verify CLIENT_ID, CLIENT_SECRET, and REFRESH_TOKEN
+   - **Expired token**: Run the setup command again to get a new REFRESH_TOKEN
+   - **npx cache issue**: Clear npx cache: `rm -rf ~/.npm/_npx`
+
+4. **Reload Claude Code**: After fixing `.mcp.json`, reload the window (Ctrl/Cmd + Shift + P → "Developer: Reload Window")
+
+### Runtime Errors
+
+#### "Missing required environment variables"
+
+Make sure your `.mcp.json` file has all three environment variables: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_REFRESH_TOKEN`.
+
+#### "redirect_uri_mismatch"
+
+Ensure `http://localhost:8080` (no trailing slash!) is added to **Authorized redirect URIs** in the OAuth 2.0 Client settings in Google Cloud Console.
+
+#### "Error 403: access_denied"
+
+1. **OAuth consent screen is in Testing mode**: Add your Google account email to the **Test users** section
+2. **API not enabled**: Enable "Google Search Console API" in GCP Console
+3. **No access to the site**: Verify you have access to the Search Console property you're querying
+
+#### "Invalid site URL format"
 
 Site URLs must be complete URLs like:
 
 - `https://example.com/` (for URL-prefix properties)
 - `sc-domain:example.com` (for domain properties)
 
-### "Date range too old"
+#### "Date range too old"
 
 Search Console data is only available for the last 16 months.
 
-### "Rate limit exceeded"
+#### "Rate limit exceeded"
 
 The tool will automatically retry with backoff. If you continue to hit limits:
 
@@ -283,13 +375,15 @@ The tool will automatically retry with backoff. If you continue to hit limits:
 - Reduce `rowLimit` in analytics queries
 - API Limits: 2,000 requests/day, 600 requests/100 seconds
 
-### Token Expired
+#### Token Expired
 
-Re-run the authentication setup:
+If you see authentication errors, your refresh token may have expired. Re-run the authentication setup:
 
 ```bash
-node build/auth/setup-auth.js
+npx -y -p google-search-console-mcp-server google-search-console-mcp-setup
 ```
+
+Copy the new `GOOGLE_REFRESH_TOKEN` to your `.mcp.json`.
 
 ## Development
 
